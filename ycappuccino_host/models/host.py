@@ -1,14 +1,14 @@
 #app="all"
-from ycappuccino.core.models.decorators  import Item, Property, ItemReference
-from ycappuccino.storage.models.model import Model
-from ycappuccino.core.decorator_app import App
+from ycappuccino_core.models.decorators  import Item, Property, ItemReference
+from ycappuccino_storage.models.model import Model
+from ycappuccino_core.decorator_app import App
 
 _empty = None
 
-@App(name="ycappuccino.rest-app")
-@Item(collection="clientPaths", name="clientPath", plural="clientPaths")
-@ItemReference(from_name="clientPath",field="_layout_parent", item="layout")
-class ClientPath(Model):
+@App(name="ycappuccino_host")
+@Item(collection="hosts", name="host", plural="hosts")
+@ItemReference(from_name="host",field="_layout_parent", item="layout")
+class Host(Model):
     """ describe an account in the application """
     def __init__(self, a_dict=None):
         super().__init__(a_dict)

@@ -1,11 +1,11 @@
 #app="all"
-from ycappuccino.core.models.decorators  import Item, Property,  Reference, ItemReference
-from ycappuccino.storage.models.model import Model
-from ycappuccino.core.decorator_app import App
+from ycappuccino_core.models.decorators  import Item, Property,  Reference, ItemReference
+from ycappuccino_storage.models.model import Model
+from ycappuccino_core.decorator_app import App
 
 _empty = None
 
-@App(name="ycappuccino.rest-app")
+@App(name="ycappuccino_host")
 @Item(collection="layouts", name="layout", plural="layouts", secure_write=True, secure_read=True)
 @ItemReference(from_name="layout",field="_layout_parent", item="layout")
 class Layout(Model):

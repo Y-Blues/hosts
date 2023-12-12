@@ -1,6 +1,6 @@
 #app="all"
-from ycappuccino.core.api import IActivityLogger
-from ycappuccino.rest_app_base.api import IClobReplaceService
+from ycappuccino_core.api import IActivityLogger
+from ycappuccino_host.api import IClobReplaceService
 
 import inspect
 import pelix.remote
@@ -9,12 +9,12 @@ import mimetypes
 from pelix.ipopo.decorators import ComponentFactory, Requires, Validate, Provides, Instantiate, Property, UnbindField
 import os
 from os import path
-from ycappuccino.core.decorator_app import App
+from ycappuccino_core.decorator_app import Layer
 
 from pelix.ipopo.decorators import BindField
-from ycappuccino.endpoints.api import IClientIndexPath
+from ycappuccino_host.api import IHost
 
-from ycappuccino.core.utils import bundle_models_loaded_path_by_name
+from ycappuccino_core.utils import bundle_models_loaded_path_by_name
 
 _logger = logging.getLogger(__name__)
 
@@ -26,13 +26,12 @@ COMPONENT_PROPERTY ="@Property"
 @ComponentFactory('IndexEndpoint-Factory')
 @Provides(specifications=[pelix.http.HTTP_SERVLET])
 @Requires("_log",IActivityLogger.name, spec_filter="'(name=main)'")
-@Requires("_list_path_client",IClientIndexPath.name, aggregate=True, optional=True)
+@Requires("_list_path_client",IHost.name, aggregate=True, optional=True)
 @Requires("_list_replace_clob",IClobReplaceService.name, aggregate=True, optional=True)
 @Instantiate("IndexEndpoint")
 @Property("_servlet_path", pelix.http.HTTP_SERVLET_PATH, "/")
 @Property("_reject", pelix.remote.PROP_EXPORT_REJECT, pelix.http.HTTP_SERVLET)
-@App(name="ycappuccino.rest-app")
-
+@Layer(name="ycappuccino_host")
 class IndexEndpoint(object):
 
     """ bundle that allow to open index.html.save as root path of http endpoint and provide client bundle on path client """
@@ -245,6 +244,8 @@ class IndexEndpoint(object):
         if not w_in_known_path:
             w_file_path = w_path + "/client" + a_file_path
 
+
+
         if a_file_path.endswith("/"):
             w_file_path = w_file_path + "index.html"
             if not os.path.exists(w_file_path) and w_client_path is not None and w_client_path.get_type() == "pyscript":
@@ -281,6 +282,8 @@ class IndexEndpoint(object):
         w_header = request.get_headers()
 
         w_file = w_req_path.split("?")[0]
+        if "." not in w_file.split("/")[-1]:
+            w_file = w_file + "/"
         is_clob = False
         is_blob = False
         w_path, w_client_path = self._get_path_app(w_header,w_file)

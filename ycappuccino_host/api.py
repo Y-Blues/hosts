@@ -1,14 +1,7 @@
 #app="all"
-from ycappuccino.core.api import CFQCN
+from ycappuccino_core.api import CFQCN
 
 
-class ILoginService(object):
-    """ interface of YCappuccino component """
-    name = CFQCN.build("ILoginService")
-
-    def __init__(self):
-        """ abstract constructor """
-        pass
 
 
 class IClobReplaceService(object):
@@ -20,16 +13,17 @@ class IClobReplaceService(object):
         pass
 
 
-class IClientIndexPathFactory(object):
+class IHost(object):
     """ interface of YCappuccino component """
-    name = CFQCN.build("IClientIndexPathFactory")
+    name = CFQCN.build("IHost")
 
     def __init__(self):
         """ abstract constructor """
         pass
-class ITenantTrigger(object):
+
+class IHostFactory(object):
     """ interface of YCappuccino component """
-    name = CFQCN.build("ITenantTrigger")
+    name = CFQCN.build("IHostFactory")
 
     def __init__(self):
         """ abstract constructor """

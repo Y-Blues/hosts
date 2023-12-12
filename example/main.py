@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    init(root_path=args.root_path, app="test", port=args.port)
+    init(root_path=args.root_path, app="ycappuccino_host", layers=["ycappuccino_host","ycappuccino_storage","ycappuccino_endpoints","ycappuccino_endpoints_storage"], bundle_prefix="ycappuccino", port=args.port)
     # Run the server
     start()
 

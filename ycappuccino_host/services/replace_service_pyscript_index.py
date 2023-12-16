@@ -1,6 +1,10 @@
-#app="all"
-from ycappuccino_core.api import IActivityLogger, YCappuccino, IService
-from ycappuccino_host.api import IClobReplaceService
+"""
+TODO review and move it
+component that allow load pyscript and the framewor in client side.
+
+"""
+from ycappuccino_api.core.api import IActivityLogger, YCappuccino, IService
+from ycappuccino_api.host.api import IClobReplaceService
 
 import logging
 from pelix.ipopo.decorators import ComponentFactory, Requires, Provides, BindField, UnbindField, Instantiate

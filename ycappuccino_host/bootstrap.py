@@ -1,7 +1,12 @@
-#app="all"
+
+""""
+    boot start default host provided by the application
+    TODO review if we need a default one
+"""
+
 from ycappuccino_host.models.host import Host
-from ycappuccino_core.api import IActivityLogger,  YCappuccino
-from ycappuccino_storage.api import IManager, IBootStrap
+from ycappuccino_api.core.api import IActivityLogger,  YCappuccino
+from ycappuccino_api.storage.api import IManager, IBootStrap
 from ycappuccino_core.decorator_app import Layer
 
 import logging
@@ -11,14 +16,14 @@ from pelix.ipopo.decorators import ComponentFactory, Requires, Validate, Invalid
 _logger = logging.getLogger(__name__)
 
 
-@ComponentFactory('AccountBootStrapClientPath-Factory')
+@ComponentFactory('BootStrapClientPath-Factory')
 @Provides(specifications=[IBootStrap.name, YCappuccino.name])
 @Requires("_log", IActivityLogger.name, spec_filter="'(name=main)'")
 @Requires("_manager_host", IManager.name, spec_filter="'(item_id=host)'")
 @Property("_id", "id", "core")
 @Instantiate("AccountBootStrapClientPath")
 @Layer(name="ycappuccino_host")
-class AccountBootStrapClientPath(IBootStrap):
+class BootStrapClientPath(IBootStrap):
 
     def __init__(self):
         super(IBootStrap, self).__init__();
@@ -57,21 +62,21 @@ class AccountBootStrapClientPath(IBootStrap):
 
     @Validate
     def validate(self, context):
-        self._log.info("AccountBootStrap validating")
+        self._log.info("BootStrapClientPath validating")
         try:
             self.bootstrap()
         except Exception as e:
-            self._log.error("AccountBootStrapClientPath Error {}".format(e))
+            self._log.error("BootStrapClientPath Error {}".format(e))
             self._log.exception(e)
 
-        self._log.info("AccountBootStrapClientPath validated")
+        self._log.info("BootStrapClientPath validated")
 
     @Invalidate
     def invalidate(self, context):
-        self._log.info("AccountBootStrapClientPath invalidating")
+        self._log.info("BootStrapClientPath invalidating")
         try:
             pass
         except Exception as e:
             self._log.error("AccountBootStrap Error {}".format(e))
             self._log.exception(e)
-        self._log.info("AccountBootStrapClientPath invalidated")
+        self._log.info("BootStrapClientPath invalidated")

@@ -1,7 +1,9 @@
-#app="all"
-from ycappuccino_core.api import IActivityLogger
-from ycappuccino_storage.api import IManager, IBootStrap
-from ycappuccino_host.api import IHostFactory
+"""
+    host factory service that allow to create a host service regarding the host component stored.
+"""
+from ycappuccino_api.core.api import IActivityLogger
+from ycappuccino_api.storage.api import IManager, IBootStrap
+from ycappuccino_api.host.api import IHostFactory
 
 import logging
 from pelix.ipopo.decorators import ComponentFactory, Requires, Validate, Invalidate, Provides, Instantiate, BindField, UnbindField

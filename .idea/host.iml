@@ -8,6 +8,7 @@
     <orderEntry type="module" module-name="core" />
     <orderEntry type="module" module-name="storage" />
     <orderEntry type="module" module-name="endpoints" />
+    <orderEntry type="module" module-name="api" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="PLAIN" />

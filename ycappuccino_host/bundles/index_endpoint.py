@@ -1,6 +1,10 @@
-#app="all"
-from ycappuccino_core.api import IActivityLogger
-from ycappuccino_host.api import IClobReplaceService
+"""
+    servlet that deliver static content regarding location provide by path client component
+
+"""
+
+from ycappuccino_api.core.api import IActivityLogger
+from ycappuccino_api.host.api import IClobReplaceService
 
 import inspect
 import pelix.remote
@@ -12,7 +16,8 @@ from os import path
 from ycappuccino_core.decorator_app import Layer
 
 from pelix.ipopo.decorators import BindField
-from ycappuccino_host.api import IHost
+import pelix.http
+from ycappuccino_api.host.api import IHost
 
 from ycappuccino_core.utils import bundle_models_loaded_path_by_name
 

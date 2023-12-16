@@ -1,4 +1,9 @@
-#app="all"
+"""
+    models that describe a host that can be deliver by the index endpoint
+
+"""
+
+
 from ycappuccino_core.models.decorators  import Item, Property, ItemReference
 from ycappuccino_storage.models.model import Model
 from ycappuccino_core.decorator_app import App
@@ -7,7 +12,6 @@ _empty = None
 
 @App(name="ycappuccino_host")
 @Item(collection="hosts", name="host", plural="hosts")
-@ItemReference(from_name="host",field="_layout_parent", item="layout")
 class Host(Model):
     """ describe an account in the application """
     def __init__(self, a_dict=None):

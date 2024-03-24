@@ -1,0 +1,26 @@
+---
+models.app:
+  ycappuccino_host: true
+  ycappuccino_service_comm_storage: true
+layers:
+  ycappuccino_host:
+    active: true
+    http_path: /
+  ycappuccino_service_comm:
+    active: true
+    host: localhost
+    port: 0
+    scheme: http
+  ycappuccino_service_comm_storage:
+    active: true
+    host: localhost
+    port: 27017
+    type: mongo
+    db_name: remote_storage
+name: host
+bundle_prefix: ycappuccino
+config:
+  http_server:
+    active: true
+    port: 8080
+    ip: localhost

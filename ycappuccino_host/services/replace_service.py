@@ -5,11 +5,13 @@ component that allow to replace variable in a js file if the extention of the fi
 
 """
 
-from ycappuccino_api.core.api import IActivityLogger, YCappuccino, IService
+from ycappuccino_api.core.api import IActivityLogger,  IService
 from ycappuccino_api.host.api import IClobReplaceService
 
 import logging
 from pelix.ipopo.decorators import ComponentFactory, Requires, Provides, BindField, UnbindField, Instantiate
+
+from ycappuccino_api.proxy.api import YCappuccinoRemote
 from ycappuccino_core.models.decorators import get_map_items
 from ycappuccino_core.decorator_app import Layer
 
@@ -18,18 +20,21 @@ _logger = logging.getLogger(__name__)
 
 
 @ComponentFactory('JSReplaceService-Factory')
-@Requires("_log",IActivityLogger.name, spec_filter="'(name=main)'")
-@Requires("_services", specification=IService.name, aggregate=True, optional=True)
-@Provides(specifications=[IClobReplaceService.name, YCappuccino.name])
+@Requires("_log",IActivityLogger.__name__, spec_filter="'(name=main)'")
+@Requires("_services", specification=IService.__name__, aggregate=True, optional=True)
+@Provides(specifications=[YCappuccinoRemote.__name__, IClobReplaceService.__name__])
 @Instantiate("JSReplaceService")
 @Layer(name="ycappuccino_host")
 class JSReplaceService(IClobReplaceService):
 
     def __init__(self):
+        super(IClobReplaceService,self).__init__()
         self._services = None
         self._map_services = {}
         self._log = None
-    def extension(self):
+
+    @staticmethod
+    def extension():
         return ".js.mdl"
 
     def replace_content(self, a_in, a_path, a_client_path):

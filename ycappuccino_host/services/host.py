@@ -10,6 +10,8 @@ from ycappuccino_api.host.api import IHost
 
 import logging, os
 from pelix.ipopo.decorators import ComponentFactory, Requires, Validate, Invalidate, Property,  Provides
+
+from ycappuccino_api.proxy.api import YCappuccinoRemote
 from ycappuccino_core.decorator_app import Layer
 
 import inspect
@@ -20,9 +22,9 @@ _logger = logging.getLogger(__name__)
 
 
 @ComponentFactory('Host-Factory')
-@Provides(specifications=[IHost.name])
-@Requires("_log", IActivityLogger.name, spec_filter="'(name=main)'")
-@Requires("_config", IConfiguration.name)
+@Provides(specifications=[YCappuccinoRemote.__name__, IHost.__name__])
+@Requires("_log", IActivityLogger.__name__, spec_filter="'(name=main)'")
+@Requires("_config", IConfiguration.__name__)
 @Property('_id', "id", "default")
 @Property('_type', "type", "default")
 @Property('_subpath', "subpath", "client")

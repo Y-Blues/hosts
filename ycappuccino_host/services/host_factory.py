@@ -1,7 +1,9 @@
+
 """
     host factory service that allow to create a host service regarding the host component stored.
 """
 from ycappuccino_api.core.api import IActivityLogger
+from ycappuccino_api.proxy.api import YCappuccinoRemote
 from ycappuccino_api.storage.api import IManager, IBootStrap
 from ycappuccino_api.host.api import IHostFactory
 
@@ -14,10 +16,10 @@ _logger = logging.getLogger(__name__)
 
 
 @ComponentFactory('HostFactory-Factory')
-@Provides(specifications=[IHostFactory.name])
-@Requires("_log", IActivityLogger.name, spec_filter="'(name=main)'")
-@Requires("_manager_host", IManager.name, spec_filter="'(item_id=host)'")
-@Requires("_bootstraps", specification=IBootStrap.name, aggregate=True, optional=True)
+@Provides(specifications=[YCappuccinoRemote.__name__, IHostFactory.__name__])
+@Requires("_log", IActivityLogger.__name__, spec_filter="'(name=main)'")
+@Requires("_manager_host", IManager.__name__, spec_filter="'(item_id=host)'")
+@Requires("_bootstraps", specification=IBootStrap.__name__, aggregate=True, optional=True)
 @Instantiate("HostFactory")
 @Layer(name="ycappuccino_host")
 class ClientPathFactory(IHostFactory):

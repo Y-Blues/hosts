@@ -26,13 +26,14 @@ _logger = logging.getLogger(__name__)
 COMPONENT_FACTORY = "@ComponentFactory"
 COMPONENT_INSTANTIATE = "@Instantiate"
 COMPONENT_REQUIRE = "@Requires"
-COMPONENT_PROPERTY ="@Property"
+COMPONENT_PROPERTY = "@Property"
+
 
 @ComponentFactory('IndexEndpoint-Factory')
 @Provides(specifications=[pelix.http.HTTP_SERVLET])
-@Requires("_log",IActivityLogger.name, spec_filter="'(name=main)'")
-@Requires("_list_path_client",IHost.name, aggregate=True, optional=True)
-@Requires("_list_replace_clob",IClobReplaceService.name, aggregate=True, optional=True)
+@Requires("_log",IActivityLogger.__name__, spec_filter="'(name=main)'")
+@Requires("_list_path_client",IHost.__name__, aggregate=True, optional=True)
+@Requires("_list_replace_clob",IClobReplaceService.__name__, aggregate=True, optional=True)
 @Instantiate("IndexEndpoint")
 @Property("_servlet_path", pelix.http.HTTP_SERVLET_PATH, "/")
 @Property("_reject", pelix.remote.PROP_EXPORT_REJECT, pelix.http.HTTP_SERVLET)
@@ -74,14 +75,13 @@ class IndexEndpoint(object):
     def bind_replace_clob(self, field, a_replace_clob, a_service_reference):
         self._replace_clob[a_replace_clob.extension()] = a_replace_clob
 
-
     @UnbindField("_list_replace_clob")
     def unbind_replace_clob(self, field, a_replace_clob, a_service_reference):
         del self._replace_clob[a_replace_clob.extension()]
 
+    @staticmethod
     def manage_python(self, a_path):
         """ manage python component client"""
-
         with open(a_path) as f:
             w_lines = f.readlines()
             w_lines_str = ""

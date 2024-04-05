@@ -3,9 +3,9 @@
     boot start default host provided by the application
     TODO review if we need a default one
 """
-
+from ycappuccino_api.proxy.api import YCappuccinoRemote
 from ycappuccino_host.models.host import Host
-from ycappuccino_api.core.api import IActivityLogger,  YCappuccino
+from ycappuccino_api.core.api import IActivityLogger
 from ycappuccino_api.storage.api import IManager, IBootStrap
 from ycappuccino_core.decorator_app import Layer
 
@@ -17,16 +17,16 @@ _logger = logging.getLogger(__name__)
 
 
 @ComponentFactory('BootStrapClientPath-Factory')
-@Provides(specifications=[IBootStrap.name, YCappuccino.name])
-@Requires("_log", IActivityLogger.name, spec_filter="'(name=main)'")
-@Requires("_manager_host", IManager.name, spec_filter="'(item_id=host)'")
+@Provides(specifications=[YCappuccinoRemote.__name__, IBootStrap.__name__])
+@Requires("_log", IActivityLogger.__name__, spec_filter="'(name=main)'")
+@Requires("_manager_host", IManager.__name__, spec_filter="'(item_id=host)'")
 @Property("_id", "id", "core")
-@Instantiate("AccountBootStrapClientPath")
+@Instantiate("BootStrapClientPath")
 @Layer(name="ycappuccino_host")
 class BootStrapClientPath(IBootStrap):
 
     def __init__(self):
-        super(IBootStrap, self).__init__();
+        super(BootStrapClientPath, self).__init__();
 
 
         self._manager_host = None

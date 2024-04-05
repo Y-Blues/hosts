@@ -3,11 +3,13 @@ TODO review and move it
 component that allow load pyscript and the framewor in client side.
 
 """
-from ycappuccino_api.core.api import IActivityLogger, YCappuccino, IService
+from ycappuccino_api.core.api import IActivityLogger, IService
 from ycappuccino_api.host.api import IClobReplaceService
 
 import logging
 from pelix.ipopo.decorators import ComponentFactory, Requires, Provides, BindField, UnbindField, Instantiate
+
+from ycappuccino_api.proxy.api import YCappuccinoRemote
 from ycappuccino_core.decorator_app import Layer
 import glob
 from ycappuccino_core.models.decorators import get_bundle_model_ordered
@@ -18,18 +20,22 @@ _logger = logging.getLogger(__name__)
 
 
 @ComponentFactory('PyScriptIndexReplaceService-Factory')
-@Requires("_log",IActivityLogger.name, spec_filter="'(name=main)'")
-@Requires("_services", specification=IService.name, aggregate=True, optional=True)
-@Provides(specifications=[IClobReplaceService.name, YCappuccino.name])
+@Requires("_log",IActivityLogger.__name__, spec_filter="'(name=main)'")
+@Requires("_services", specification=IService.__name__, aggregate=True, optional=True)
+@Provides(specifications=[YCappuccinoRemote.__name__, IClobReplaceService.__name__])
 @Instantiate("PyScriptIndexReplaceService")
 @Layer(name="ycappuccino_host")
 class PyScriptIndexReplaceService(IClobReplaceService):
 
+
     def __init__(self):
+        super(IClobReplaceService,self).__init__()
         self._services = None
         self._map_services = {}
         self._log = None
-    def extension(self):
+
+    @staticmethod
+    def extension():
         return ".html"
 
     def replace_content(self, a_in, a_path, a_client_path):
@@ -39,7 +45,6 @@ class PyScriptIndexReplaceService(IClobReplaceService):
         list_python_files = []
         for w_client_path in a_client_path.get_path():
             w_list = glob.glob(w_client_path+"/**/*.py",recursive=True)
-
 
             for w_file in w_list:
                 if "__init__" not in w_file:

@@ -4,10 +4,10 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="endpoints_storage" />
+    <orderEntry type="module" module-name="endpoint_crud" />
     <orderEntry type="module" module-name="core" />
-    <orderEntry type="module" module-name="storage" />
-    <orderEntry type="module" module-name="endpoints" />
+    <orderEntry type="module" module-name="repositories" />
+    <orderEntry type="module" module-name="http" />
     <orderEntry type="module" module-name="api" />
   </component>
   <component name="PyDocumentationSettings">

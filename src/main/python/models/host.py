@@ -3,17 +3,18 @@
 
 """
 
-
-from ycappuccino_core.models.decorators  import Item, Property, ItemReference
-from ycappuccino_storage.models.model import Model
-from ycappuccino_core.decorator_app import App
+from src.main.python.models.decorators import Item, Property
+from ycappuccino_storage import Model
+from src.main.python.decorator_app import App
 
 _empty = None
+
 
 @App(name="ycappuccino_host")
 @Item(collection="hosts", name="host", plural="hosts")
 class Host(Model):
-    """ describe an account in the application """
+    """describe an account in the application"""
+
     def __init__(self, a_dict=None):
         super().__init__(a_dict)
         self._secure = None
@@ -52,4 +53,3 @@ class Host(Model):
     @Property(name="secure")
     def secure(self, a_value):
         self._secure = a_value
-

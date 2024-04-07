@@ -19,7 +19,7 @@ from pelix.ipopo.decorators import (
 )
 
 from src.main.python.proxy import YCappuccinoRemote
-from src.main.python.models.decorators import get_map_items
+from ycappuccino.hosts.models import get_map_items
 from src.main.python.decorator_app import Layer
 
 

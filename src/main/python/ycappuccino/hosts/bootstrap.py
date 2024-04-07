@@ -4,7 +4,7 @@
 """
 
 from src.main.python.proxy import YCappuccinoRemote
-from src.main.python.models.host import Host
+from ycappuccino.hosts.models.host import Host
 from ycappuccino_api.core.api import IActivityLogger
 from ycappuccino_api.storage.api import IManager, IBootStrap
 from src.main.python.decorator_app import Layer

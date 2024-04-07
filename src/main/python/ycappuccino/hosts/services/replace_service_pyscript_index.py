@@ -20,7 +20,7 @@ from pelix.ipopo.decorators import (
 from src.main.python.proxy import YCappuccinoRemote
 from src.main.python.decorator_app import Layer
 import glob
-from src.main.python.models.decorators import get_bundle_model_ordered
+from ycappuccino.hosts.models import get_bundle_model_ordered
 
 _logger = logging.getLogger(__name__)
 

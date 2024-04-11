@@ -4,8 +4,8 @@
 
 """
 
-from ycappuccino_api.core.api import IActivityLogger, IConfiguration
-from ycappuccino_api.host.api import IHost
+from ycappuccino.api.core.api import IActivityLogger, IConfiguration
+from ycappuccino.api.host.api import IHost
 
 import logging, os
 from pelix.ipopo.decorators import (
@@ -17,8 +17,8 @@ from pelix.ipopo.decorators import (
     Provides,
 )
 
-from src.main.python.proxy import YCappuccinoRemote
-from src.main.python.decorator_app import Layer
+from ycappuccino.api.proxy.api import YCappuccinoRemote
+from ycappuccino.core.decorator_app import Layer
 
 import inspect
 import base64

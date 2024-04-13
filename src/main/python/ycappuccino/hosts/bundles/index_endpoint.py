@@ -3,8 +3,8 @@
 
 """
 
-from ycappuccino_api.core.api import IActivityLogger
-from ycappuccino_api.host.api import IClobReplaceService
+from ycappuccino.api.core.api import IActivityLogger
+from ycappuccino.api.host.api import IClobReplaceService
 
 import inspect
 import pelix.remote

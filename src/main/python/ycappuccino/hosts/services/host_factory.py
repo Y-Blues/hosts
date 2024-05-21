@@ -2,10 +2,10 @@
     host factory service that allow to create a host service regarding the host component stored.
 """
 
-from ycappuccino_api.core.api import IActivityLogger
-from src.main.python.proxy import YCappuccinoRemote
-from ycappuccino_api.storage.api import IManager, IBootStrap
-from ycappuccino_api.host.api import IHostFactory
+from ycappuccino.api.core import IActivityLogger
+from ycappuccino.api.proxy import YCappuccinoRemote
+from ycappuccino.api.storage import IManager, IBootStrap
+from ycappuccino.api.hosts import IHostFactory
 
 import logging
 from pelix.ipopo.decorators import (
@@ -19,7 +19,8 @@ from pelix.ipopo.decorators import (
     UnbindField,
 )
 from pelix.ipopo.constants import use_ipopo
-from src.main.python.decorator_app import Layer
+
+from ycappuccino.core.decorator_app import Layer
 
 _logger = logging.getLogger(__name__)
 

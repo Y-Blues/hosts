@@ -3,11 +3,10 @@
     TODO review if we need a default one
 """
 
-from ycappuccino.api.proxy.api import YCappuccinoRemote
+from ycappuccino.api.proxy import YCappuccinoRemote
 from ycappuccino.hosts.models.host import Host
-from ycappuccino.api.core.api import IActivityLogger
-from ycappuccino.api.storage.api import IManager, IBootStrap
-from ycappuccino.core.decorator_app import Layer
+from ycappuccino.api.core import IActivityLogger
+from ycappuccino.api.storage import IManager, IBootStrap
 
 import logging
 from pelix.ipopo.decorators import (
@@ -20,6 +19,7 @@ from pelix.ipopo.decorators import (
     Instantiate,
 )
 
+from ycappuccino.core.decorator_app import Layer
 
 _logger = logging.getLogger(__name__)
 

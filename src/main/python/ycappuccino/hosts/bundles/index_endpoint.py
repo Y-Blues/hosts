@@ -3,8 +3,8 @@
 
 """
 
-from ycappuccino.api.core.api import IActivityLogger
-from ycappuccino.api.host.api import IClobReplaceService
+from ycappuccino.api.core import IActivityLogger
+from ycappuccino.api.hosts import IClobReplaceService
 
 import inspect
 import pelix.remote
@@ -21,13 +21,11 @@ from pelix.ipopo.decorators import (
 )
 import os
 from os import path
-from src.main.python.decorator_app import Layer
 
 from pelix.ipopo.decorators import BindField
 import pelix.http
-from ycappuccino_api.host.api import IHost
-
-from ycappuccino_core import bundle_models_loaded_path_by_name
+from ycappuccino.api.hosts import IHost
+from ycappuccino.core.decorator_app import Layer
 
 _logger = logging.getLogger(__name__)
 

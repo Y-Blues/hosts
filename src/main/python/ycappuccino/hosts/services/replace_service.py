@@ -5,8 +5,9 @@ component that allow to replace variable in a js file if the extention of the fi
 
 """
 
-from ycappuccino_api.core.api import IActivityLogger, IService
-from ycappuccino_api.host.api import IClobReplaceService
+from ycappuccino.api.core import IActivityLogger, IService
+from ycappuccino.api.decorators import get_map_items
+from ycappuccino.api.hosts import IClobReplaceService
 
 import logging
 from pelix.ipopo.decorators import (
@@ -18,10 +19,8 @@ from pelix.ipopo.decorators import (
     Instantiate,
 )
 
-from src.main.python.proxy import YCappuccinoRemote
-from ycappuccino.hosts.models import get_map_items
-from src.main.python.decorator_app import Layer
-
+from ycappuccino.api.proxy import YCappuccinoRemote
+from ycappuccino.core.decorator_app import Layer
 
 _logger = logging.getLogger(__name__)
 

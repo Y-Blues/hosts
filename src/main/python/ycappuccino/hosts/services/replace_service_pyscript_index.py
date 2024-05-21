@@ -4,8 +4,9 @@ component that allow load pyscript and the framewor in client side.
 
 """
 
-from ycappuccino_api.core.api import IActivityLogger, IService
-from ycappuccino_api.host.api import IClobReplaceService
+from ycappuccino.api.core import IActivityLogger, IService
+from ycappuccino.api.decorators import get_bundle_model_ordered
+from ycappuccino.api.hosts import IClobReplaceService
 
 import logging
 from pelix.ipopo.decorators import (
@@ -17,10 +18,10 @@ from pelix.ipopo.decorators import (
     Instantiate,
 )
 
-from src.main.python.proxy import YCappuccinoRemote
-from src.main.python.decorator_app import Layer
 import glob
-from ycappuccino.hosts.models import get_bundle_model_ordered
+
+from ycappuccino.api.proxy import YCappuccinoRemote
+from ycappuccino.core.decorator_app import Layer
 
 _logger = logging.getLogger(__name__)
 

@@ -3,9 +3,10 @@
 
 """
 
-from ycappuccino.core.models.decorators import Item, Property
-from ycappuccino.core.models import Model
 from ycappuccino.core.decorator_app import App
+
+from ycappuccino.api.decorators import Item, Property
+from ycappuccino.api.models import Model
 
 _empty = None
 

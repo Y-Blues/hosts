@@ -23,9 +23,10 @@ import os
 from os import path
 
 from pelix.ipopo.decorators import BindField
-import pelix.http
+import pelix.http  # type: ignore
 from ycappuccino.api.hosts import IHost
 from ycappuccino.core.decorator_app import Layer
+from ycappuccino.core.utils import bundle_models_loaded_path_by_name
 
 _logger = logging.getLogger(__name__)
 

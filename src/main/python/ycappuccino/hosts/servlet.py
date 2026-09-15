@@ -10,12 +10,15 @@ See spec (2026-09-15-hosts-design.md) for the design decisions:
   lower-priority Host when the file is absent.
 - Basic Auth credentials are read from IConfiguration under "<host id>.login" /
   "<host id>.password"; a secure Host with nothing configured always refuses (401),
-  never falls back to a known default.
+  never falls back to a known default. IConfiguration is a mandatory dependency here
+  (core always provides it) rather than Optional[IConfiguration]: an optional
+  dependency satisfied elsewhere in the same multi-path "ycappuccino.*" namespace
+  package was observed to resolve non-deterministically (sometimes None) depending on
+  scan timing; a mandatory dependency makes core wait for it, like `manager`/`logger`.
 - A failed/missing auth answers 401 (with WWW-Authenticate), never 404.
 """
 
 import base64
-import logging
 import mimetypes
 import os
 from typing import Optional
@@ -33,7 +36,7 @@ class HostServlet(IHttpServlet):
     def __init__(
         self,
         manager: IManager,
-        configuration: Optional[IConfiguration],
+        configuration: IConfiguration,
         logger: YCappuccinoType(IActivityLogger, "(name=main)"),
         path: str = "/",
     ):
@@ -77,7 +80,7 @@ class HostServlet(IHttpServlet):
                 return _not_found()
 
             etag = _etag(file_path)
-            if_none_match = request.headers.get("if-none-match")
+            if_none_match = _header(request.headers, "if-none-match")
             if if_none_match == etag:
                 return HttpResponse(status=304, headers={"ETag": etag})
 
@@ -102,7 +105,7 @@ class HostServlet(IHttpServlet):
         expected_password = self._configuration.get(f"{host['id']}.password", None)
         if expected_login is None or expected_password is None:
             return False
-        credentials = _decode_basic(headers.get("authorization"))
+        credentials = _decode_basic(_header(headers, "authorization"))
         if credentials is None:
             return False
         login, password = credentials
@@ -125,6 +128,15 @@ class HostServlet(IHttpServlet):
         if not os.path.isfile(real_candidate):
             return None
         return real_candidate
+
+
+def _header(headers: dict, name: str) -> Optional[str]:
+    """case-insensitive header lookup: a real HTTP server preserves the client's header
+    case (e.g. "Authorization"), unlike the lowercase dicts used in unit test doubles"""
+    for key, value in headers.items():
+        if key.lower() == name:
+            return value
+    return None
 
 
 def _matches(request_path: str, mount: str) -> bool:

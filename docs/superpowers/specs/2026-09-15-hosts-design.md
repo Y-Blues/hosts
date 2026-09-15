@@ -70,7 +70,7 @@ class HostServlet(IHttpServlet):
     def __init__(
         self,
         manager: IManager,
-        configuration: Optional[IConfiguration],
+        configuration: IConfiguration,
         logger: YCappuccinoType(IActivityLogger, "(name=main)"),
         path: str = "/",
     ):
@@ -115,7 +115,7 @@ def _decode_basic(header: str) -> tuple[str, str] | None:
     return (user, password) if ":" in decoded else None
 ```
 
-`IConfiguration` est **optionnelle** (`Optional[IConfiguration]`, reconnu nativement par `core` sans `YCappuccinoType`) : dans un test unitaire sans framework, on peut construire `HostServlet` avec `configuration=None` ; un `Host` `secure=True` refusera alors systématiquement (voir Décisions), ce qui est le comportement sûr par défaut, testé explicitement.
+`IConfiguration` est une dépendance **obligatoire** du constructeur, pas `Optional[IConfiguration]` : `core` la fournit inconditionnellement (`Composants fournis` du README de `core`), donc dans une vraie application elle est toujours disponible — en faire une dépendance optionnelle n'apporterait rien et, empiriquement, expose une résolution non déterministe d'une dépendance optionnelle satisfaite lors du scan d'un paquet `ycappuccino.*` à plusieurs répertoires (paquet namespace multi-chemins) : parfois injectée, parfois `None` selon le minutage exact du scan, un comportement non reproductible constaté pendant l'implémentation et jamais rencontré ailleurs dans les dépôts déjà migrés (aucun ne combine dépendance optionnelle + modèle `@Item` dans le même paquet). Rendre la dépendance obligatoire élimine la course : `core` attend que `IConfiguration` soit disponible avant de valider `HostServlet`, exactement comme pour `manager` et `logger`. Un test unitaire sans framework n'est pas affecté : il construit `HostServlet` directement (`HostServlet(manager, configuration, logger)`), et peut très bien y passer `configuration=None` à la main (Python ne vérifie pas les annotations à l'exécution) pour couvrir le cas « pas de configuration disponible » — voir `_check_auth`, qui gère explicitement `self._configuration is None` en refusant toujours, un filet de sécurité qui reste utile même si la dépendance est obligatoire côté framework.
 
 ## 4. CRUD
 

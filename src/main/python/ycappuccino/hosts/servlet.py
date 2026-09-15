@@ -16,6 +16,13 @@ See spec (2026-09-15-hosts-design.md) for the design decisions:
   package was observed to resolve non-deterministically (sometimes None) depending on
   scan timing; a mandatory dependency makes core wait for it, like `manager`/`logger`.
 - A failed/missing auth answers 401 (with WWW-Authenticate), never 404.
+- A Host with cross_origin_isolated=True (see models/host.py) gets
+  Cross-Origin-Opener-Policy: same-origin and Cross-Origin-Embedder-Policy: require-corp added
+  to EVERY response served under its mount, success or error alike (200/304/401/404/500): this
+  is a page-level isolation mode, not tied to any one status code. Off by default, and only
+  added when a Host actually matched the request - see ycappuccino-client's README.md for why
+  this exists (a pthread-enabled Pyodide build needs it) and the real tension it creates with
+  third-party CDN resources.
 """
 
 import base64
@@ -57,6 +64,7 @@ class HostServlet(IHttpServlet):
                 "directory": os.path.abspath(document["directory"]),
                 "priority": document.get("priority") or 0,
                 "secure": bool(document.get("secure")),
+                "cross_origin_isolated": bool(document.get("cross_origin_isolated")),
             })
         hosts.sort(key=lambda host: host["priority"], reverse=True)
         self._hosts = hosts
@@ -69,6 +77,13 @@ class HostServlet(IHttpServlet):
         if host is None:
             return _not_found()
 
+        response = await self._serve(host, request)
+        if host["cross_origin_isolated"]:
+            response.headers.setdefault("Cross-Origin-Opener-Policy", "same-origin")
+            response.headers.setdefault("Cross-Origin-Embedder-Policy", "require-corp")
+        return response
+
+    async def _serve(self, host: dict, request: HttpRequest) -> HttpResponse:
         if host["secure"]:
             authorized = self._check_auth(host, request.headers)
             if not authorized:

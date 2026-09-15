@@ -201,6 +201,45 @@ class TestHostServletDispatch(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(response.status, 200)
 
+    async def test_cross_origin_isolated_host_gets_coop_coep_headers(self):
+        servlet = self._servlet(
+            [{
+                "_id": "default", "path": "/", "directory": self.directory, "priority": 0,
+                "secure": False, "cross_origin_isolated": True,
+            }]
+        )
+        await servlet.start()
+
+        response = await servlet.handle(_request("/style.css"))
+
+        self.assertEqual(response.headers["Cross-Origin-Opener-Policy"], "same-origin")
+        self.assertEqual(response.headers["Cross-Origin-Embedder-Policy"], "require-corp")
+
+    async def test_cross_origin_isolated_headers_are_also_added_to_error_responses(self):
+        servlet = self._servlet(
+            [{
+                "_id": "default", "path": "/", "directory": self.directory, "priority": 0,
+                "secure": False, "cross_origin_isolated": True,
+            }]
+        )
+        await servlet.start()
+
+        response = await servlet.handle(_request("/missing.txt"))
+
+        self.assertEqual(response.status, 404)
+        self.assertEqual(response.headers["Cross-Origin-Opener-Policy"], "same-origin")
+
+    async def test_cross_origin_isolated_defaults_to_false_no_headers_added(self):
+        servlet = self._servlet(
+            [{"_id": "default", "path": "/", "directory": self.directory, "priority": 0, "secure": False}]
+        )
+        await servlet.start()
+
+        response = await servlet.handle(_request("/style.css"))
+
+        self.assertNotIn("Cross-Origin-Opener-Policy", response.headers)
+        self.assertNotIn("Cross-Origin-Embedder-Policy", response.headers)
+
     async def test_secure_host_without_configuration_is_always_401(self):
         servlet = self._servlet(
             [{"_id": "admin", "path": "/", "directory": self.directory, "priority": 0, "secure": True}],

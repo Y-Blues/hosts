@@ -21,7 +21,7 @@ from ycappuccino.core.decorator_app import App
 @Item(collection="hosts", name="host", plural="hosts")
 class Host(Model):
 
-    def __init__(self, a_dict=None):
+    def __init__(self, a_dict: dict | None = None) -> None:
         super().__init__(a_dict)
         self._path = None
         self._directory = None
@@ -30,21 +30,21 @@ class Host(Model):
         self._cross_origin_isolated = False
 
     @Property(name="path")
-    def path(self, a_value):
+    def path(self, a_value: str) -> None:
         self._path = a_value
 
     @Property(name="directory")
-    def directory(self, a_value):
+    def directory(self, a_value: str) -> None:
         self._directory = a_value
 
     @Property(name="priority", type="integer")
-    def priority(self, a_value):
+    def priority(self, a_value: int) -> None:
         self._priority = a_value
 
     @Property(name="secure", type="boolean")
-    def secure(self, a_value):
+    def secure(self, a_value: bool) -> None:
         self._secure = a_value
 
     @Property(name="cross_origin_isolated", type="boolean")
-    def cross_origin_isolated(self, a_value):
+    def cross_origin_isolated(self, a_value: bool) -> None:
         self._cross_origin_isolated = a_value

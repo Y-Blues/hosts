@@ -46,14 +46,14 @@ class HostServlet(IHttpServlet):
         configuration: IConfiguration,
         logger: YCappuccinoType(IActivityLogger, "(name=main)"),
         path: str = "/",
-    ):
+    ) -> None:
         self._manager = manager
         self._configuration = configuration
         self._logger = logger
         self._path = path
         self._hosts: list = []
 
-    async def start(self):
+    async def start(self) -> None:
         models = await self._manager.get_many(_ITEM_ID, subject=None)
         hosts = []
         for model in models:
@@ -69,7 +69,7 @@ class HostServlet(IHttpServlet):
         hosts.sort(key=lambda host: host["priority"], reverse=True)
         self._hosts = hosts
 
-    async def stop(self):
+    async def stop(self) -> None:
         pass
 
     async def handle(self, request: HttpRequest) -> HttpResponse:
@@ -160,7 +160,7 @@ def _matches(request_path: str, mount: str) -> bool:
     return request_path == mount or request_path.startswith(mount + "/")
 
 
-def _decode_basic(header: Optional[str]):
+def _decode_basic(header: Optional[str]) -> Optional[tuple]:
     if not header or not header.startswith("Basic "):
         return None
     try:

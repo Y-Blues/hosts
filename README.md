@@ -52,11 +52,9 @@ await manager.up_sert_model(host)
 `Host.cross_origin_isolated` (défaut `False`) : quand `True`, `HostServlet` ajoute
 `Cross-Origin-Opener-Policy: same-origin` et `Cross-Origin-Embedder-Policy: require-corp` à
 **toutes** les réponses de ce montage (succès et erreurs, `200`/`304`/`401`/`404`/`500` compris).
-C'est ce que réclame un navigateur avant d'autoriser `SharedArrayBuffer`, lui-même requis par un
-build Pyodide **pthread** — voir le dépôt [client](../client/README.md), section « Risques
-d'exécution navigateur » : `ycappuccino-client` démarre un vrai `Framework`, dont
-`core.async_runner.AsyncRunner` a besoin d'un vrai thread OS, ce qu'un Pyodide mono-thread standard
-ne peut pas faire.
+C'est ce que réclame un navigateur avant d'autoriser `SharedArrayBuffer`. `ycappuccino-client` n'en a
+pas besoin : sans threads, `core.async_runner.AsyncRunner` exécute les coroutines sur le thread appelant, et
+le `Framework` tourne sur un Pyodide standard (voir le README de [client](../client/README.md)).
 
 **Tension réelle, non résolue par ce dépôt** : activer `cross_origin_isolated` sur un montage peut
 casser le chargement de ressources tierces cross-origin (typiquement un CDN public pyscript/Pyodide)
